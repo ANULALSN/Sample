@@ -613,10 +613,24 @@ body.deep-space-body .stagger-item:hover img.grayscale {
   filter: drop-shadow(0 0 10px rgba(0, 191, 234, 0.4));
 }
 
-body.deep-space-body .stagger-item .text-slate-400 {
-  color: #94a3b8 !important;
-  font-size: 0.55rem;
-  letter-spacing: 0.15em;
+/* Hard Fix: Force all tech stack icons to Stark White in Deep Space mode */
+body.deep-space-body #tech-stack .stagger-item img {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.9 !important;
+  height: 40px !important; /* Forces h-10 equivalent for scale */
+  width: auto !important;
+  margin-bottom: 1rem;
+  transition: all 0.4s var(--easing-standard);
+}
+
+body.deep-space-body .stagger-item:hover img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px #f97316) !important;
+  opacity: 1 !important;
+  transform: translateY(-5px) scale(1.1);
+}
+
+body.deep-space-body .stagger-item span {
+  color: #f1f5f9 !important; /* Ensure text labels are also visible */
 }
 
 /* Why Acadeno Refining */
