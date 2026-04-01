@@ -1,0 +1,1118 @@
+/* AC1 Animation & Infrastructure Hub — Optimized for 60fps Mobile Parity */
+
+:root {
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --easing-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* --- Foundation: Scroll Trigger Engine --- */
+.animate-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.8s var(--easing-standard), transform 0.8s var(--easing-standard);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* Specific Entrance Animations */
+.fade-in { transform: translate3d(0, 0, 0); }
+.slide-up { transform: translate3d(0, 40px, 0); }
+.slide-down { transform: translate3d(0, -40px, 0); }
+.slide-left { transform: translate3d(-40px, 0, 0); }
+.slide-right { transform: translate3d(40px, 0, 0); }
+.zoom-in { transform: scale3d(0.95, 0.95, 1); }
+.pop-in { transform: scale3d(0.5, 0.5, 1); transition-timing-function: var(--easing-elastic); }
+
+/* --- Individual Element Animations --- */
+
+/* 1. Letter-by-Letter Reveal */
+.letter-reveal {
+  display: inline-flex;
+  overflow: visible;
+  padding-bottom: 0.15em;
+  box-sizing: border-box;
+}
+.letter {
+  display: inline-block;
+  transform: translate3d(0, 100%, 0);
+  opacity: 0;
+  transition: transform 0.5s var(--easing-decelerate), opacity 0.5s var(--easing-decelerate);
+}
+.is-visible .letter {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+
+/* Fix for Gradient Text Reveal */
+.text-gradient.letter-reveal .letter {
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Hero Headline Architecture — Zero-clipping engine with tight rhythm */
+.hero-headline {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.2 !important; /* Rules 1.2 for descender safety */
+  letter-spacing: -0.04em !important;
+  text-align: left !important;
+  overflow: visible !important;
+  display: block;
+}
+
+.hero-headline .letter-reveal {
+  padding-bottom: 0.15em !important;
+  display: inline-block !important; /* inline-block allows padding to affect layout without block-level clipping */
+  height: auto !important;
+  overflow: visible !important;
+  margin-top: -0.1em !important;
+}
+
+/* Fluid Typography & Mobile Spacing Adaptation */
+@media (max-width: 768px) {
+  .hero-headline {
+    font-size: clamp(2.5rem, 8vw, 4.5rem) !important;
+    line-height: 1.25 !important;
+  }
+}
+
+/* 2. Infinite Horizontal Marquee */
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  padding: 2rem 0;
+}
+.marquee-content {
+  display: inline-block;
+  animation: marquee-scroll 40s linear infinite;
+  will-change: transform;
+}
+.marquee-container:hover .marquee-content {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* 3. Stat Counter Animation Placeholder */
+.stat-number {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 4. Pulse & Floating Keyframes */
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -20px, 0); }
+}
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { transform: scale3d(1, 1, 1); opacity: 1; }
+  50% { transform: scale3d(1.05, 1.05, 1); opacity: 0.9; }
+}
+.pulse {
+  animation: pulse-subtle 4s ease-in-out infinite;
+}
+
+/* 6. Rotating Icons on Scroll */
+.rotate-on-scroll {
+  transition: transform 1s var(--easing-standard);
+}
+.is-visible .rotate-on-scroll {
+  transform: rotate(360deg);
+}
+
+/* 7. Process Timeline System */
+.process-timeline {
+  position: relative;
+  padding: 1rem 0;
+}
+
+/* Static background track */
+.timeline-track {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #e2e8f0;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  z-index: 1;
+}
+
+/* Animated gradient fill — grows on scroll */
+.timeline-fill {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 3px;
+  height: 0%;
+  background: linear-gradient(to bottom, #00BFEA, #7B2FBE, #F05A22);
+  transform: translateX(-50%);
+  border-radius: 3px;
+  z-index: 2;
+  transition: height 0.15s ease-out;
+  box-shadow: 0 0 12px rgba(0, 191, 234, 0.4), 0 0 24px rgba(123, 47, 190, 0.2);
+}
+
+/* Each process step row */
+.process-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  z-index: 3;
+}
+
+/* Dot marker on the line */
+.step-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 3px solid #ffffff;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 4px #ffffff;
+}
+
+/* Dot lights up when step is reached */
+.process-step.step-active .step-dot {
+  background: linear-gradient(135deg, #00BFEA, #7B2FBE);
+  box-shadow: 0 0 0 4px #ffffff, 0 0 20px rgba(0, 191, 234, 0.5), 0 0 40px rgba(123, 47, 190, 0.3);
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+/* Step card */
+.step-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card shimmer effect */
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 191, 234, 0.04), transparent);
+  transition: left 0.8s ease;
+  pointer-events: none;
+}
+
+/* Card animates in when step is active */
+.process-step.step-active .step-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.process-step.step-active .step-card::before {
+  left: 100%;
+}
+
+/* Hover elevation */
+.step-card:hover {
+  box-shadow: 0 12px 40px -8px rgba(0, 40, 109, 0.12);
+  transform: translateY(-4px) scale(1.01) !important;
+  border-color: rgba(0, 191, 234, 0.2);
+}
+
+/* Step card typography */
+body.deep-space-body .light-pocket-section .step-card h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: #0f172a !important;
+  margin-bottom: 0.75rem;
+}
+
+body.deep-space-body .light-pocket-section .step-card p {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: #64748b !important;
+}
+
+/* Alternating left/right on desktop */
+@media (min-width: 768px) {
+  .process-step:nth-child(odd) {
+    justify-content: flex-start;
+    padding-left: calc(50% + 40px);
+  }
+  .process-step:nth-child(even) {
+    justify-content: flex-end;
+    padding-right: calc(50% + 40px);
+  }
+  .process-step:nth-child(odd) .step-card {
+    transform: translateX(50px) scale(0.96);
+    text-align: left;
+  }
+  .process-step:nth-child(even) .step-card {
+    transform: translateX(-50px) scale(0.96);
+    text-align: right;
+  }
+  .process-step.step-active:nth-child(odd) .step-card,
+  .process-step.step-active:nth-child(even) .step-card {
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* 8. Glowing Pulse Button */
+.glow-pulse {
+  position: relative;
+}
+.glow-pulse::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+  opacity: 0;
+  animation: pulse-glow 2s infinite;
+}
+@keyframes pulse-glow {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+
+/* 9. Magnetic Hover Support */
+.magnetic-wrap {
+  display: inline-block;
+}
+
+/* Hover-active borders for grid cards */
+.hover-border {
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-border:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+}
+
+/* --- Background Engine: Deep Space Logic Grid --- */
+.neural-surface {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  background: #0a0a20;
+}
+
+.logic-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 70, 229, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 70, 229, 0.08) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-drift 30s linear infinite;
+}
+
+@keyframes grid-drift {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(50px, 50px, 0); }
+}
+
+.orbs-container {
+  position: absolute;
+  inset: 0;
+  filter: blur(120px);
+  opacity: 0.12;
+}
+
+.orb {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  animation: orb-drift 18s ease-in-out infinite alternate;
+}
+
+.orb-blue  { background: #4f46e5; top: -15%; left: -10%; animation-delay: 0s; }
+.orb-purple{ background: #9333ea; bottom: -15%; right: -10%; animation-delay: -6s; }
+.orb-orange{ background: #f97316; top: 40%; left: 35%; animation-delay: -12s; }
+
+@keyframes orb-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(120px, 60px, 0) scale(1.15); }
+}
+
+/* Energy Surge Canvas */
+#energy-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -9;
+  pointer-events: none;
+}
+
+/* Mobile Performance */
+@media (max-width: 768px) {
+  .orb, .logic-grid { animation: none; }
+  .logic-grid { background-size: 30px 30px; }
+}
+
+/* --- Deep Space Section Palette --- */
+/* All sections inherit deep-space by default via body */
+body.deep-space-body {
+  background: transparent; /* neural-surface handles bg */
+  color: #e2e8f0;
+}
+
+body.deep-space-body h1,
+body.deep-space-body h2,
+body.deep-space-body h3 {
+  color: #f8fafc;
+}
+
+body.deep-space-body p {
+  color: #94a3b8;
+}
+
+/* Trust Bar Deep Space */
+body.deep-space-body .trust-scroll-bar {
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(79,70,229,0.2);
+  border-bottom: 1px solid rgba(79,70,229,0.2);
+}
+
+/* Section Label text */
+body.deep-space-body .section-label {
+  color: #00BFEA;
+}
+
+/* White 'Light Pocket' Sections (Process cards) */
+.light-pocket-section {
+  background: #ffffff;
+  color: #0f172a;
+  position: relative;
+}
+
+/* Must beat body.deep-space-body h2/h3 specificity */
+body.deep-space-body .light-pocket-section h2,
+body.deep-space-body .light-pocket-section h3 {
+  color: #0f172a !important;
+}
+
+body.deep-space-body .light-pocket-section p {
+  color: #64748b !important;
+}
+
+body.deep-space-body .light-pocket-section .text-primary {
+  color: #00286d !important;
+}
+
+body.deep-space-body .light-pocket-section .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Process cards need dark text forced */
+body.deep-space-body .light-pocket-section .glass-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 30px -5px rgba(0, 0, 0, 0.08);
+}
+
+body.deep-space-body .light-pocket-section .glass-card h3 {
+  color: #0f172a !important;
+}
+
+body.deep-space-body .light-pocket-section .glass-card p {
+  color: #64748b !important;
+}
+
+/* Diagonal slash entry mask from dark to white */
+.slash-entry-top::before {
+  content: '';
+  display: block;
+  height: 80px;
+  background: linear-gradient(to bottom right, #0a0a20 50%, #ffffff 50%);
+  margin-bottom: -1px;
+}
+
+/* Diagonal slash exit mask from white to dark */
+.slash-exit-bottom::after {
+  content: '';
+  display: block;
+  height: 80px;
+  background: linear-gradient(to bottom right, #ffffff 50%, #0a0a20 50%);
+  margin-top: -1px;
+}
+
+/* Capability cards — styled in consolidated block below */
+
+/* What We Do / About Sections */
+body.deep-space-body #about {
+  background: transparent;
+}
+
+body.deep-space-body #about .text-slate-500 {
+  color: #94a3b8;
+}
+
+body.deep-space-body #about .bg-slate-100 {
+  background: rgba(255,255,255,0.04);
+}
+
+/* Tech Stack Section */
+body.deep-space-body #tech-stack {
+  background: transparent;
+}
+
+body.deep-space-body #tech-stack .bg-white {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(79,70,229,0.2) !important;
+  transition: all 0.4s var(--easing-standard), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+body.deep-space-body #tech-stack .bg-white:hover {
+  background: rgba(79, 70, 229, 0.08) !important;
+  border-color: rgba(79, 70, 229, 0.5) !important;
+  box-shadow: 0 0 25px -5px rgba(79, 70, 229, 0.25);
+  transform: translateY(-6px) scale(1.04);
+}
+
+body.deep-space-body #tech-stack .text-slate-400 {
+  color: #94a3b8;
+}
+
+/* Fix: Invert tech stack SVG icons for dark backgrounds */
+body.deep-space-body #tech-stack img.grayscale {
+  filter: grayscale(1) invert(1) brightness(1.8) !important;
+  opacity: 0.85;
+  transition: filter 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+
+body.deep-space-body #tech-stack .bg-white:hover img.grayscale {
+  filter: grayscale(0) invert(0) brightness(1) !important;
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Tech Stack section labels */
+body.deep-space-body #tech-stack .text-primary {
+  color: #00BFEA !important;
+}
+
+body.deep-space-body #tech-stack h2 {
+  color: #f8fafc !important;
+}
+
+body.deep-space-body #tech-stack > div > div > p.text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Why Acadeno — already dark, keep as is */
+body.deep-space-body #why-acadeno {
+  background: rgba(10, 10, 32, 0.95);
+  border-top: 1px solid rgba(79,70,229,0.3);
+  border-bottom: 1px solid rgba(79,70,229,0.3);
+}
+
+/* Trust Marquee Text */
+body.deep-space-body .marquee-content span {
+  color: rgba(79, 70, 229, 0.4);
+}
+
+/* Hero section contrast */
+body.deep-space-body #hero .text-slate-500 {
+  color: #94a3b8;
+}
+
+body.deep-space-body #hero .bg-white {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #e2e8f0 !important;
+}
+
+body.deep-space-body #hero .border-slate-200 {
+  border-color: rgba(79,70,229,0.3) !important;
+}
+
+/* Trust Bar refined for Deep Space */
+body.deep-space-body .bg-white.border-y.border-slate-100 {
+  background: rgba(10, 10, 32, 0.4) !important;
+  border-color: rgba(79, 70, 229, 0.1) !important;
+  backdrop-filter: blur(10px);
+}
+
+body.deep-space-body .marquee-content .text-slate-200 {
+  color: rgba(226, 232, 240, 0.25) !important;
+  transition: all 0.4s ease;
+  font-family: inherit;
+  letter-spacing: 0.1em;
+}
+
+body.deep-space-body .marquee-content .text-slate-200:hover {
+  color: rgba(0, 191, 234, 0.8) !important;
+  text-shadow: 0 0 15px rgba(0, 191, 234, 0.3);
+}
+
+/* Tech Stack Section Refining */
+body.deep-space-body .stagger-item.bg-white {
+  background: rgba(5, 5, 15, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(8px);
+  transition: all 0.4s var(--easing-standard);
+}
+
+body.deep-space-body .stagger-item.bg-white:hover {
+  background: rgba(15, 15, 40, 0.8) !important;
+  border-color: rgba(0, 191, 234, 0.3) !important;
+  transform: translateY(-8px) scale(1.05) !important;
+  box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 191, 234, 0.1);
+}
+
+body.deep-space-body .stagger-item img.grayscale {
+  filter: grayscale(1) invert(1) brightness(1.5) !important;
+  transition: all 0.4s ease;
+  opacity: 0.7;
+}
+
+body.deep-space-body .stagger-item:hover img.grayscale {
+  filter: grayscale(0) invert(0) brightness(1) !important;
+  opacity: 1;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(0, 191, 234, 0.4));
+}
+
+body.deep-space-body .stagger-item .text-slate-400 {
+  color: #94a3b8 !important;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+}
+
+/* Why Acadeno Refining */
+body.deep-space-body #why-acadeno {
+  background: rgba(5, 5, 15, 1) !important;
+  position: relative;
+}
+
+body.deep-space-body #why-acadeno::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(79, 70, 229, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+body.deep-space-body .hover-border {
+  background: rgba(15, 15, 40, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.5s var(--easing-standard);
+}
+
+body.deep-space-body .hover-border:hover {
+  background: rgba(15, 15, 40, 0.8) !important;
+  border-color: rgba(240, 90, 34, 0.3) !important; /* using orange brand color hint */
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+body.deep-space-body .hover-border h3 {
+  color: #ffffff !important;
+}
+
+/* Hero & Section Badge Labels */
+body.deep-space-body .text-primary {
+  color: #00BFEA !important;
+  filter: drop-shadow(0 0 5px rgba(0, 191, 234, 0.3));
+}
+
+/* About Section Refining */
+body.deep-space-body #about p {
+  color: #94a3b8 !important;
+}
+
+body.deep-space-body #about .bg-slate-100 {
+  background: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* Floating card in About */
+body.deep-space-body #about .bg-white.shadow-2xl {
+  background: rgba(15, 15, 40, 0.95) !important;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* CTA Section */
+body.deep-space-body #contact .bg-gradient-signature {
+  border: 1px solid rgba(79, 70, 229, 0.3);
+}
+
+/* Footer */
+body.deep-space-body footer {
+  background: rgba(5, 5, 15, 0.98) !important;
+  border-top: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+body.deep-space-body footer h4 {
+  color: #ffffff !important;
+}
+
+body.deep-space-body footer .text-slate-400 { color: #94a3b8 !important; }
+body.deep-space-body footer .text-slate-300 { color: #64748b !important; }
+body.deep-space-body footer .text-slate-500 { color: #cbd5e1 !important; }
+
+body.deep-space-body footer .bg-slate-200 {
+  background: rgba(79, 70, 229, 0.15) !important;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  transition: all 0.3s ease;
+}
+
+body.deep-space-body footer .bg-slate-200:hover {
+  background: rgba(0, 191, 234, 0.3) !important;
+  transform: translateY(-3px);
+}
+
+/* --- Hero Code Stream --- */
+.code-stream-wrap {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  height: 200px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.02;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  z-index: -1;
+  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+
+.code-line {
+  white-space: nowrap;
+  animation: code-scroll 30s linear infinite;
+}
+
+@keyframes code-scroll {
+  from { transform: translate3d(100%, 0, 0); }
+  to { transform: translate3d(-100%, 0, 0); }
+}
+
+/* --- Icon & Card Upgrades --- */
+.blueprint-icon {
+  position: relative;
+  stroke-width: 1.5px;
+  transition: all 0.4s var(--easing-standard);
+}
+
+.breathing-glow {
+  animation: icon-breathe 4s ease-in-out infinite;
+}
+
+@keyframes icon-breathe {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 191, 234, 0)); }
+  50% { filter: drop-shadow(0 0 15px rgba(0, 191, 234, 0.4)); }
+}
+
+/* glass-card — legacy, now handled per-component */
+
+/* --- Infinite Horizontal Scroller Hub --- */
+.scroller-viewport {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 4rem 0 0 0;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.scroller-track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  animation: scroll-infinite 60s linear infinite;
+  will-change: transform;
+}
+
+.scroller-viewport:hover .scroller-track {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-infinite {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ==============================================
+   CAPABILITY CARDS — Consolidated Premium Design
+   ============================================== */
+.capability-card-scroller {
+  flex: 0 0 320px;
+  height: 240px;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem;
+  background: rgba(8, 8, 28, 0.98) !important;
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transition: all 0.45s var(--easing-standard);
+  transform: translate3d(0, 0, 0);
+  cursor: pointer;
+  box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Subtle inner gradient sheen */
+.capability-card-scroller::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(79, 70, 229, 0.06) 0%, transparent 40%, rgba(0, 191, 234, 0.04) 100%);
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* Shimmer sweep on hover */
+.capability-card-scroller::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 55%, transparent 60%);
+  transform: skewX(-15deg);
+  transition: left 0.7s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.capability-card-scroller:hover::after {
+  left: 150%;
+}
+
+/* Hover state: glow border + lift */
+.capability-card-scroller:hover,
+.capability-card-scroller.card-active-mobile {
+  border-color: rgba(79, 70, 229, 0.45) !important;
+  box-shadow:
+    0 8px 32px -8px rgba(79, 70, 229, 0.25),
+    0 0 0 1px rgba(79, 70, 229, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  transform: translate3d(0, -8px, 0) scale(1.02) !important;
+}
+
+.capability-card-scroller:hover::before {
+  opacity: 1.5;
+}
+
+/* Card heading */
+.capability-card-scroller h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #e2e8f0 !important;
+  margin-top: 1rem;
+  z-index: 2;
+  letter-spacing: -0.01em;
+}
+
+/* Icon styling — clean white with subtle glow */
+.capability-card-scroller .material-symbols-outlined {
+  font-size: 3rem !important;
+  display: block;
+  z-index: 2;
+  color: #00BFEA;
+  -webkit-text-fill-color: #00BFEA;
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  filter: drop-shadow(0 0 8px rgba(0, 191, 234, 0.3));
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.capability-card-scroller:hover .material-symbols-outlined {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  filter: drop-shadow(0 0 14px rgba(0, 191, 234, 0.5));
+  transform: scale(1.1);
+}
+
+/* Description overlay — dark themed */
+.description-reveal {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 32, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  transform: translate3d(0, 100%, 0);
+  transition: transform 0.5s var(--easing-standard);
+  z-index: 5;
+  border-top: 2px solid rgba(0, 191, 234, 0.3);
+}
+
+.description-reveal p {
+  color: #94a3b8 !important;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.capability-card-scroller:hover .description-reveal {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Section Background Shift Engine */
+#capabilities {
+  transition: background 1.2s var(--easing-standard);
+  position: relative;
+}
+
+#capabilities::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0.3;
+  z-index: -1;
+  transition: background 1.2s var(--easing-standard);
+}
+
+/* --- Scan Reveal Logic --- */
+.scan-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f9731688, transparent);
+  animation: scan-pulse 6s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@keyframes scan-pulse {
+  0% { transform: translate3d(0, -100%, 0); opacity: 0; }
+  10%, 90% { opacity: 1; }
+  100% { transform: translate3d(0, 500%, 0); opacity: 0; }
+}
+
+/* Pulse Status Dot */
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #f97316;
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+  animation: status-pulse 2s infinite;
+}
+
+@keyframes status-pulse {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+
+/* --- Stagger Reveal System --- */
+.stagger-reveal {
+  opacity: 1 !important; /* parent stays visible */
+}
+
+.stagger-item {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0) scale(0.92);
+  transition: opacity 0.6s var(--easing-standard), transform 0.6s var(--easing-elastic);
+}
+
+.stagger-reveal.is-visible .stagger-item,
+.stagger-item.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Mobile Parity Updates */
+@media (max-width: 768px) {
+  nav .w-\[210px\] {
+    width: 168px;
+  }
+}
+
+/* =========================================
+   CONTRAST LAYERING SYSTEM — Blueprint Edition
+   ========================================= */
+
+/* 1. Deep Space Stat Bar */
+.stat-bar {
+  background: #0a0a20;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 70, 229, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 70, 229, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+.stat-bar-number {
+  color: #F8FAFC;
+  text-shadow: 0 0 20px rgba(79, 70, 229, 0.8), 0 0 40px rgba(0, 191, 234, 0.4);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.stat-bar-label {
+  color: rgba(248, 250, 252, 0.5);
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+
+.stat-bar-divider {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(79, 70, 229, 0.4), transparent);
+}
+
+/* Card overrides consolidated above */
+
+/* 3. Neon Status Dot on Capability Cards */
+.card-live-dot {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  background: #f97316;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 4px rgba(249, 115, 22, 0.5);
+  animation: live-pulse 2s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 0.4; box-shadow: 0 0 6px 2px rgba(249, 115, 22, 0.3); }
+  50% { opacity: 1.0; box-shadow: 0 0 14px 6px rgba(249, 115, 22, 0.6); }
+}
+
+/* 4. Conic CTA Button */
+.cta-conic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 2.5rem;
+  background: #0a0a20;
+  color: #F8FAFC;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  z-index: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-conic::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: conic-gradient(
+    from var(--conic-angle, 0deg),
+    #4f46e5,
+    #9333ea,
+    #f97316,
+    #00BFEA,
+    #4f46e5
+  );
+  z-index: -1;
+  animation: conic-spin 4s linear infinite;
+}
+
+.cta-conic::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 14px;
+  background: #0a0a20;
+  z-index: -1;
+}
+
+@property --conic-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes conic-spin {
+  to { --conic-angle: 360deg; }
+}
+
+.cta-conic:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 50px -10px rgba(79, 70, 229, 0.4);
+}
+
+/* 5. Mobile Image Contrast Boost */
+@media (max-width: 768px) {
+  .about-img-wrap img {
+    filter: grayscale(1) contrast(1.2) opacity(0.6);
+  }
+  .capability-card-scroller .material-symbols-outlined {
+    filter: drop-shadow(0 0 12px rgba(79, 70, 229, 0.3));
+  }
+}
