@@ -98,25 +98,23 @@
   }
 }
 
-/* 2. Infinite Horizontal Marquee */
+/* 2. Infinite Horizontal Marquee (Trust Bar) */
 .marquee-container {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
   padding: 2rem 0;
-  -webkit-overflow-scrolling: touch; /* iOS Smoothness */
 }
 
 .marquee-content {
-  display: inline-block;
+  display: inline-flex;
+  gap: 20px;
   animation: marquee-scroll 40s linear infinite;
   will-change: transform;
 }
 
-.marquee-container:hover .marquee-content,
-.marquee-container:focus .marquee-content,
-.marquee-container:active .marquee-content {
+.marquee-container:hover .marquee-content {
   animation-play-state: paused;
 }
 
@@ -125,36 +123,10 @@
   to { transform: translate3d(-50%, 0, 0); }
 }
 
-/* Mobile-Only: Enable High-Performance Manual Swipe Scroller */
+/* Mobile: Trusted Across remains purely dynamic scroll */
 @media (max-width: 768px) {
   .marquee-container {
-    overflow-x: auto !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    cursor: grab;
-    -webkit-overflow-scrolling: touch;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  
-  .marquee-container::-webkit-scrollbar {
-    display: none;
-  }
-
-  .marquee-content {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    animation: none !important; /* Rules 1 & 2: Disable auto-scroll for native touch */
-    width: max-content !important; 
-    gap: 1.5rem !important;
-  }
-
-  /* Stabilize cards for manual swiping */
-  .capability-card-scroller {
-    flex-shrink: 0 !important;
-    width: 280px !important;
-    margin: 0 !important;
-    transform: none !important;
+    overflow: hidden !important;
   }
 }
 
@@ -830,13 +802,32 @@ body.deep-space-body footer .bg-slate-200:hover {
   will-change: transform;
 }
 
-.scroller-viewport:hover .scroller-track {
+.scroller-viewport:hover .scroller-track,
+.scroller-viewport:focus .scroller-track,
+.scroller-viewport:active .scroller-track {
   animation-play-state: paused;
 }
 
 @keyframes scroll-infinite {
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Mobile Capability Scroller: Hybrid Swipable + Auto-Scroll */
+@media (max-width: 768px) {
+  .scroller-viewport {
+    overflow-x: auto !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+  }
+  .scroller-viewport::-webkit-scrollbar {
+    display: none;
+  }
+  .scroller-viewport:active .scroller-track {
+    animation-play-state: paused !important;
+  }
 }
 
 /* ==============================================
