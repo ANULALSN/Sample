@@ -7,6 +7,20 @@
   --easing-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
+/* 14. iOS & Mobile High-Fidelity Rendering Optimized */
+@media (max-width: 768px) {
+  .nav-glass img,
+  .hero-headline,
+  .stagger-item img {
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+}
+
 /* --- Foundation: Scroll Trigger Engine --- */
 .animate-on-scroll {
   opacity: 0;
@@ -91,18 +105,42 @@
   white-space: nowrap;
   position: relative;
   padding: 2rem 0;
+  -webkit-overflow-scrolling: touch; /* iOS Smoothness */
 }
+
 .marquee-content {
   display: inline-block;
   animation: marquee-scroll 40s linear infinite;
   will-change: transform;
 }
-.marquee-container:hover .marquee-content {
+
+.marquee-container:hover .marquee-content,
+.marquee-container:focus .marquee-content,
+.marquee-container:active .marquee-content {
   animation-play-state: paused;
 }
+
 @keyframes marquee-scroll {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Mobile-Only: Enable Manual Swipe for Infinite Scroller */
+@media (max-width: 768px) {
+  .marquee-container {
+    overflow-x: auto !important;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    cursor: grab;
+  }
+  .marquee-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+  
+  /* Allow marquee to pause on touch so user can scroll manually */
+  .marquee-container:active .marquee-content {
+    animation-play-state: paused !important;
+  }
 }
 
 /* 3. Stat Counter Animation Placeholder */
