@@ -125,21 +125,36 @@
   to { transform: translate3d(-50%, 0, 0); }
 }
 
-/* Mobile-Only: Enable Manual Swipe for Infinite Scroller */
+/* Mobile-Only: Enable High-Performance Manual Swipe Scroller */
 @media (max-width: 768px) {
   .marquee-container {
     overflow-x: auto !important;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     cursor: grab;
-  }
-  .marquee-container::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    -webkit-overflow-scrolling: touch;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
   
-  /* Allow marquee to pause on touch so user can scroll manually */
-  .marquee-container:active .marquee-content {
-    animation-play-state: paused !important;
+  .marquee-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .marquee-content {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    animation: none !important; /* Rules 1 & 2: Disable auto-scroll for native touch */
+    width: max-content !important; 
+    gap: 1.5rem !important;
+  }
+
+  /* Stabilize cards for manual swiping */
+  .capability-card-scroller {
+    flex-shrink: 0 !important;
+    width: 280px !important;
+    margin: 0 !important;
+    transform: none !important;
   }
 }
 
