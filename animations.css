@@ -16,8 +16,15 @@
     backface-visibility: hidden !important;
     -webkit-transform: translate3d(0, 0, 0) !important;
     transform: translate3d(0, 0, 0) !important;
-    image-rendering: -webkit-optimize-contrast !important;
     -webkit-font-smoothing: antialiased !important;
+  }
+
+  /* Specific fix for logo to prevent Retina blur */
+  .nav-glass img {
+    -webkit-transform: none !important;
+    transform: none !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    will-change: auto !important; /* Prevents low-res GPU rasterization */
   }
 }
 
